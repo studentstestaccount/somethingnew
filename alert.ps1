@@ -16,16 +16,23 @@ try {
     $reader = New-Object System.IO.StreamReader($stream)
     $writer = New-Object System.IO.StreamWriter($stream)
 
+    # Create a new console for remote output
+    $remoteConsole = [System.Console]::OpenStandardOutput()
+    $remoteWriter = [System.IO.StreamWriter]::new($remoteConsole)
+
     while ($true) {
+        $input = Read-Host
+        $writer.WriteLine($input)
+        $writer.Flush()
+
         $output = $reader.ReadLine()
         if ($output -eq $null) {
             break
         }
-        Write-Host $output
 
-        $input = Read-Host
-        $writer.WriteLine($input)
-        $writer.Flush()
+        # Write remote console output to the local console
+        $remoteWriter.WriteLine($output)
+        $remoteWriter.Flush()
     }
 }
 catch {
@@ -34,5 +41,10 @@ catch {
 finally {
     if ($client -ne $null) {
         $client.Close()
+    }
+
+    # Close the remote console
+    if ($remoteWriter -ne $null) {
+        $remoteWriter.Close()
     }
 }
