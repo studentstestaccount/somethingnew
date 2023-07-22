@@ -17,15 +17,15 @@ try {
     $writer = New-Object System.IO.StreamWriter($stream)
 
     while ($true) {
-        $input = Read-Host
-        $writer.WriteLine($input)
-        $writer.Flush()
-
         $output = $reader.ReadLine()
         if ($output -eq $null) {
             break
         }
         Write-Host $output
+
+        $input = Read-Host
+        $writer.WriteLine($input)
+        $writer.Flush()
     }
 }
 catch {
